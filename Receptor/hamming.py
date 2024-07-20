@@ -34,20 +34,31 @@ def main():
             if conteo % 2 != 0:
                 error_position += i
 
-    if error_position != 0:
+    if error_position>n:
+        print("La cadena tiene más de dos errores y no pueden ser identificados")
+    elif error_position != 0:
+        print("\n\n---------------------------------------------------------------------------")
         print(f"Error en la posición: {error_position}")
         hamming_code[error_position - 1] = '1' if hamming_code[error_position - 1] == '0' else '0'
         
         print("Mensaje corregido: ", end="")
         print("".join(hamming_code))
 
-    # Extracción del mensaje original
-    original_message = ""
-    for i in range(1, n + 1):
-        if not is_power_of_two(i):
-            original_message += hamming_code[i - 1]
+        # Extracción del mensaje original
+        original_message = ""
+        for i in range(1, n + 1):
+            if not is_power_of_two(i):
+                original_message += hamming_code[i - 1]
 
-    print(f"\n\n--------------- Mensaje original --------------- \n{original_message}")
+        print(f"\n\n--------------- Mensaje original --------------- \n{original_message}")
+    elif error_position == 0:
+        # Extracción del mensaje original
+        original_message = ""
+        for i in range(1, n + 1):
+            if not is_power_of_two(i):
+                original_message += hamming_code[i - 1]
+
+        print(f"\n\n--------------- Mensaje original --------------- \n{original_message}")
 
 if __name__ == "__main__":
     main()
