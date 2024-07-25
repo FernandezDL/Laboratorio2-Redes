@@ -43,15 +43,12 @@ def main():
     checksumFromBinary = binaryToChecksum(binaryChecksum)
     checksumFromMessage = fletcher16(message)
 
-    # print("Mensaje: ", message)
-    # print("Checksum desde mensaje: ", checksumFromMessage)
-    # print("Checksum en decimal: ", checksumFromBinary)
-
     if(checksumFromBinary == checksumFromMessage): #Si los checksum's coinciden
         print("\n\n--------------- Mensaje original --------------- \n", message)
 
     else:
-        print("\n\n*************** Se detecto un error *************** \n")
+        print("\n\n**************** Se detecto un error **************** \n")
+        print("*************** El mensaje se descarta *************** \n")
     
 if __name__ == "__main__":
     main()
