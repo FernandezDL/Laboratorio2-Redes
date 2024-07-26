@@ -1,10 +1,10 @@
 # Laboratorio 2 - Detección y corrección de errores
 
 ## Contenido
-- [Descripción]()
-- [Temas vistos]()
-- [Organización]()
-- [Integrantes]()
+- [Descripción](https://github.com/FernandezDL/Laboratorio2-Redes?tab=readme-ov-file#descripci%C3%B3n)
+- [Temas vistos](https://github.com/FernandezDL/Laboratorio2-Redes?tab=readme-ov-file#temas-vistos)
+- [Organización](https://github.com/FernandezDL/Laboratorio2-Redes?tab=readme-ov-file#organizaci%C3%B3n)
+- [Integrantes](https://github.com/FernandezDL/Laboratorio2-Redes?tab=readme-ov-file#integrantes)
 
 ## Descripción
 Los errores de transmisión suceden en toda comunicación y es parte de los retos al momento de
