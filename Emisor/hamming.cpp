@@ -4,6 +4,8 @@
 #include <string>
 #include <bitset>
 #include <algorithm>
+#include <cstdlib>
+#include <ctime>
 
 using namespace std;
 
@@ -17,7 +19,7 @@ string stringToBinary(const string& input) {
     string binaryString;
     for (char c : input) {
         bitset<8> binary(c);
-        binaryString += binary.to_string() + " ";
+        binaryString += binary.to_string();
     }
     return binaryString;
 }
@@ -26,6 +28,9 @@ int main() {
     int n, m, r = 0;
     string message, binaryMessage;
     bool flag = false;
+
+    // Inicializa la semilla del generador de números aleatorios
+    srand(static_cast<unsigned int>(time(0)));
 
     cout << "--------------- Codigo de Hamming ---------------" << endl << endl;
 
@@ -87,9 +92,23 @@ int main() {
         }
     }
 
-    cout << endl << "--------------- Codigo de Hamming ---------------" << endl;
+    cout<< endl <<"--------------- Cadena con ruido ---------------"<<endl ;
+    
+    //Introduciendo ruido aleatoriamente en la cadena
     for (char c : hammingCode) {
-        cout << c;
+        int randomNumber = rand() % 100;
+        
+        if(randomNumber == 0){ //Si hay probabilidad de 1/100
+            if(c == '0'){ //Cambia el valor
+                c = '1';
+            } else{
+                c = '0';
+            }
+
+            cout<<"\033[31m"<<c<<"\033[0m"; //Color rojo cambio de bit
+        } else{
+            cout<<c; //Color negro bit normal
+        }
     }
 
     return 0;
