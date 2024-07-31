@@ -2,6 +2,8 @@
 #include <vector>
 #include <cmath>
 #include <string>
+#include <bitset>
+#include <algorithm>
 
 using namespace std;
 
@@ -10,30 +12,46 @@ bool isPowerOfTwo(int n) {
     return (n != 0) && ((n & (n - 1)) == 0);
 }
 
+//Función para convertir una cadena a binario
+string stringToBinary(const string& input) {
+    string binaryString;
+    for (char c : input) {
+        bitset<8> binary(c);
+        binaryString += binary.to_string() + " ";
+    }
+    return binaryString;
+}
+
 int main() {
     int n, m, r = 0;
-    string binaryMessage;
+    string message, binaryMessage;
     bool flag = false;
 
-    cout << "--------------- Emisor en codigo de Hamming ---------------" << endl << endl;
+    cout << "--------------- Codigo de Hamming ---------------" << endl << endl;
 
     while (!flag) {
         cout << "Ingrese la cadena a utilizar: " << endl;
-        cin >> binaryMessage;
+        cin >> message;
 
-        m = binaryMessage.length();
-
-        if (m > 0) { //Termina si la cadena tiene longitud mayor a 0
-            while (pow(2, r) < (m + r + 1)) { //Calcula el número de bits de paridad
-                r++;
-            }
-
+        if(message.length() > 0) { //Si no es una cadena vacia
             flag = true;
-        } else {
-            cout << "La longitud de la cadena binaria debe ser mayor a 0, intente nuevamente." << endl;
+        } else{
+            cout << "La longitud de la cadena debe ser mayor a 0, intente nuevamente." << endl;
         }
     }
 
+    binaryMessage = stringToBinary(message); //Convierte la cadena a binario
+    // Eliminar los espacios en blanco al final de binaryMessage
+    binaryMessage.erase(find_if(binaryMessage.rbegin(), binaryMessage.rend(), [](unsigned char ch) {
+        return !isspace(ch);
+    }).base(), binaryMessage.end());
+
+    m = binaryMessage.length();
+
+    while (pow(2, r) < (m + r + 1)) { //Calcula el número de bits de paridad
+        r++;
+    }
+    
     n = m + r;
 
     vector<char> hammingCode(n, '0'); //Arreglo para el mensaje codificado
