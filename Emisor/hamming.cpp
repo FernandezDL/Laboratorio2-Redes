@@ -9,24 +9,27 @@
 
 using namespace std;
 
-//Función que calcula si un número es potencia de dos
+// Función que calcula si un número es potencia de dos
 bool isPowerOfTwo(int n) {
     return (n != 0) && ((n & (n - 1)) == 0);
 }
 
-//Función para convertir una cadena a binario
+// Función para convertir una cadena a binario
 string stringToBinary(const string& input) {
     string binaryString;
-    for (char c : input) {
+
+    for (size_t i = 0; i < input.size() + 1; ++i) {
+        char c = input[i];
         bitset<8> binary(c);
         binaryString += binary.to_string();
     }
+    
     return binaryString;
 }
 
-int main() {
+string hamming() {
     int n, m, r = 0;
-    string message, binaryMessage;
+    string message, binaryMessage, finalMessage;
     bool flag = false;
 
     // Inicializa la semilla del generador de números aleatorios
@@ -36,7 +39,7 @@ int main() {
 
     while (!flag) {
         cout << "Ingrese la cadena a utilizar: " << endl;
-        cin >> message;
+        getline(cin, message);
 
         if(message.length() > 0) { //Si no es una cadena vacia
             flag = true;
@@ -71,7 +74,7 @@ int main() {
         }
     }
 
-    //Calculo de los bits de paridad
+    // Calculo de los bits de paridad
     for (int i = 1; i <= n; i++) {
         if (isPowerOfTwo(i)) {
             int conteo = 0;
@@ -94,7 +97,7 @@ int main() {
 
     cout<< endl <<"--------------- Cadena con ruido ---------------"<<endl ;
     
-    //Introduciendo ruido aleatoriamente en la cadena
+    // Introduciendo ruido aleatoriamente en la cadena
     for (char c : hammingCode) {
         int randomNumber = rand() % 100;
         
@@ -109,7 +112,16 @@ int main() {
         } else{
             cout<<c; //Color negro bit normal
         }
+
+        finalMessage += c;
     }
+
+    return finalMessage;
+}
+
+int main() {
+    // Generar el mensaje codificado con Hamming
+    string hammingCode = hamming();
 
     return 0;
 }
