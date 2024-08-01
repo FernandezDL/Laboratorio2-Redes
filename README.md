@@ -4,8 +4,8 @@
 - [Descripción](https://github.com/FernandezDL/Laboratorio2-Redes?tab=readme-ov-file#descripci%C3%B3n)
 - [Temas vistos](https://github.com/FernandezDL/Laboratorio2-Redes?tab=readme-ov-file#temas-vistos)
 - [Organización](https://github.com/FernandezDL/Laboratorio2-Redes?tab=readme-ov-file#organizaci%C3%B3n)
-- [Compilación]()
-- [Informe]()
+- [Compilación](https://github.com/FernandezDL/Laboratorio2-Redes/blob/main/README.md#compilaci%C3%B3n)
+- [Informe](https://github.com/FernandezDL/Laboratorio2-Redes/blob/main/README.md#informe)
 - [Integrantes](https://github.com/FernandezDL/Laboratorio2-Redes?tab=readme-ov-file#integrantes)
 
 ## Descripción
