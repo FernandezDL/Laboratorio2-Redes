@@ -167,7 +167,7 @@ int main() {
     WSACleanup();
 
     // Output the durations to a file for further analysis
-    ofstream durationFile("durations.txt");
+    ofstream durationFile("../Statistics/Fletcher/Emisor/durations.txt");
     if (!durationFile) {
         cerr << "Error opening durations file for writing" << endl;
         return 1;
@@ -178,7 +178,7 @@ int main() {
     durationFile.close();
 
     // Output the noisy results to a file
-    ofstream noisyFile("noisy_results.txt");
+    ofstream noisyFile("../Statistics/Fletcher/Emisor/noisy_results.txt");
     if (!noisyFile) {
         cerr << "Error opening noisy results file for writing" << endl;
         return 1;
