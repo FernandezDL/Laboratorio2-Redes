@@ -1,6 +1,14 @@
 def is_power_of_two(n):
     return (n != 0) and ((n & (n - 1)) == 0)
 
+def binary_to_text(binary_str):
+    # Divide el mensaje binario en bloques de 8 bits
+    n = int(binary_str, 2)
+    binary_list = [binary_str[i:i+8] for i in range(0, len(binary_str), 8)]
+    # Convierte cada bloque de 8 bits a un carácter ASCII
+    text = ''.join([chr(int(b, 2)) for b in binary_list])
+    return text
+
 def main():
     r = 0
     flag = False
@@ -50,7 +58,7 @@ def main():
             if not is_power_of_two(i):
                 original_message += hamming_code[i - 1]
 
-        print(f"\n\n--------------- Mensaje original --------------- \n{original_message}")
+        print(f"\n\n--------------- Mensaje original --------------- \n{binary_to_text(original_message)}")
     elif error_position == 0:
         # Extracción del mensaje original
         original_message = ""
@@ -58,7 +66,7 @@ def main():
             if not is_power_of_two(i):
                 original_message += hamming_code[i - 1]
 
-        print(f"\n\n--------------- Mensaje original --------------- \n{original_message}")
+        print(f"\n\n--------------- Mensaje original --------------- \n{binary_to_text(original_message)}")
 
 if __name__ == "__main__":
     main()
