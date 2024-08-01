@@ -6,8 +6,11 @@
 #include <cstdlib>
 #include <ctime>
 #include <winsock2.h>
+#include <chrono>
+#include <fstream>
 
 using namespace std;
+using namespace std::chrono;
 
 uint16_t fletcher16(const vector<uint8_t>& data) {
     int sum1 = 0;
@@ -42,9 +45,9 @@ string stringToBinary(const string& input) {
     return binaryString;
 }
 
-string fletcherCode() {
-    string binaryMessage, originalMessage, codedMessage, noisyMessage;
-    bool flag = false;
+pair<string, bool> fletcherCode(string originalMessage) {
+    string binaryMessage, codedMessage, noisyMessage;
+    bool flag = false, noisy = false;
 
     // Inicializa la semilla del generador de números aleatorios
     srand(static_cast<unsigned int>(time(0)));
@@ -52,18 +55,15 @@ string fletcherCode() {
     cout << "--------------- Codigo Fletcher 16 ---------------" << endl << endl;
 
     while (!flag) {
-        cout << "Ingrese la cadena a utilizar: " << endl;
-        getline(cin, originalMessage);
-
-        if (originalMessage.length() > 0) { //Si la cadena es mayor a 0
-            binaryMessage = stringToBinary(originalMessage); //Convierte la cadena a binario
+        if (originalMessage.length() > 0) { // Si la cadena es mayor a 0
+            binaryMessage = stringToBinary(originalMessage); // Convierte la cadena a binario
 
             // Eliminar los espacios en blanco al final de binaryMessage
             binaryMessage.erase(find_if(binaryMessage.rbegin(), binaryMessage.rend(), [](unsigned char ch) {
                 return !isspace(ch);
             }).base(), binaryMessage.end());
 
-            if (binaryMessage.length() % 8 != 0) { //Si la cadena no es múltiplo de 8
+            if (binaryMessage.length() % 8 != 0) { // Si la cadena no es múltiplo de 8
                 while (binaryMessage.length() % 8 != 0) {
                     binaryMessage = '0' + binaryMessage;
                 }
@@ -74,8 +74,6 @@ string fletcherCode() {
             cout << "La longitud de la cadena binaria debe ser mayor a 0, intente nuevamente." << endl;
         }
     }
-
-    cout << "Cadena a usar: " << binaryMessage << endl;
 
     vector<uint8_t> message;
 
@@ -94,21 +92,25 @@ string fletcherCode() {
         int randomNumber = rand() % 100;
 
         if (randomNumber == 0) {
-            if (c == '0') { //Cambia el valor
+            if (c == '0') { // Cambia el valor
                 c = '1';
             } else {
                 c = '0';
             }
 
-            cout << "\033[31m" << c << "\033[0m"; //Color rojo cambio de bit
+            cout << "\033[31m" << c << "\033[0m"; // Color rojo cambio de bit
+            noisy = true; // Si un caracter se voltea, la cadena es ruidosa
         } else {
-            cout << c; //Color negro bit normal
+            cout << c; // Color negro bit normal
         }
 
         noisyMessage += c;
     }
 
-    return noisyMessage;
+    // Añadir la bandera "END" al final del mensaje
+    noisyMessage += "END";
+
+    return make_pair(noisyMessage, noisy);
 }
 
 int main() {
@@ -135,19 +137,56 @@ int main() {
         return 1;
     }
 
-    string noisyMessage = fletcherCode();
-    
-    cout<<noisyMessage.c_str();
+    // Multiples pruebas
+    int numTest = 100;
+    vector<double> durations;
+    vector<string> noisyResults;
 
-    // Send data
-    if (send(s, noisyMessage.c_str(), noisyMessage.size(), 0) < 0) {
-        cerr << "Send failed: " << WSAGetLastError() << endl;
-        return 1;
+    for (int i = 0; i < numTest; i++) {
+        string message = "Mensaje Prueba " + to_string(i);
+        auto result = fletcherCode(message);
+        string noisyMessage = result.first;
+        bool noisy = result.second;
+
+        auto start = high_resolution_clock::now();
+
+        // Send data
+        if (send(s, noisyMessage.c_str(), noisyMessage.size(), 0) < 0) {
+            cerr << "Send failed: " << WSAGetLastError() << endl;
+            return 1;
+        }
+
+        auto end = high_resolution_clock::now();
+        double duration = duration_cast<microseconds>(end - start).count();
+        durations.push_back(duration);
+
+        noisyResults.push_back(noisy ? "True" : "False");
     }
-
 
     closesocket(s);
     WSACleanup();
+
+    // Output the durations to a file for further analysis
+    ofstream durationFile("durations.txt");
+    if (!durationFile) {
+        cerr << "Error opening durations file for writing" << endl;
+        return 1;
+    }
+    for (double duration : durations) {
+        durationFile << duration << endl;
+    }
+    durationFile.close();
+
+    // Output the noisy results to a file
+    ofstream noisyFile("noisy_results.txt");
+    if (!noisyFile) {
+        cerr << "Error opening noisy results file for writing" << endl;
+        return 1;
+    }
+    for (const string& result : noisyResults) {
+        noisyFile << result << endl;
+    }
+    noisyFile.close();
 
     return 0;
 }
